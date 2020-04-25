@@ -99,7 +99,6 @@ client.on("guildMemberSpeaking", async (member, speaking) => {
             break;
           }
         }
-      }
       if (transcription.length > 0) {
         console.log(`Transcription: ${transcription}`);
         channel.send(`${member.displayName} said ${transcription}`);
