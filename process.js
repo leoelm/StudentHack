@@ -23,7 +23,7 @@ client.once('ready', () => {
   console.log('Ready!');
 });
 
-client.login();
+client.login('NzAzNjUwOTM2NjA5ODMzMDAx.XqSpgg.9xNesJeUvD3_VGS_Hx8rDZ-Kwtc');
 
 client.on("message", async (msg) => {
     if (msg.content.startsWith("/moderate")) {
@@ -84,23 +84,23 @@ client.on("guildMemberSpeaking", async (member, speaking) => {
 
       // Detects speech in the audio file
       const [response] = await client.recognize(request);
-      const transcription = response.results
+      var transcription = response.results
         .map(result => result.alternatives[0].transcript)
-        .join('\n');
-        transcription = transcription.split(" ")
-        for(word in transcription) {
-          let ratings = stringSimilarity.findBestMatch(word, swearWords)
-          if(ratings[ratings.bestMatchIndex].rating >= 0.8) {
-            channel.send(member.displayName + " please stop swearing!" + 
-            "\nWE DO NOT TOLERATE THIS KIND OF FUCKING LANGUAGE ON THIS GODDAMN SERVER.")
-            break;
-          }
+        .join(' ');
+      transcriptionParts = transcription.split(' ');
+      for (word of transcriptionParts) {
+        let ratings = stringSimilarity.findBestMatch(word, swearWords);
+        console.log(ratings);
+        if(ratings.bestMatch.rating >= 0.8) {
+          channel.send(member.displayName + " please stop swearing!" + 
+          "\nWE DO NOT TOLERATE THIS KIND OF FUCKING LANGUAGE ON THIS GODDAMN SERVER.")
+          break;
         }
-      if (transcription.length > 2) {
-      console.log(`Transcription: ${transcription}`);
-      channel.send(`${member.displayName} said ${transcription}`);
-    }
+      }
+      if (transcription.length > 0) {
+        console.log(`Transcription: ${transcription}`);
+        channel.send(`${member.displayName} said ${transcription}`);
+      }
     });
   });
 });
-
