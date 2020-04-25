@@ -9,7 +9,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@discordjs/opus": "^0.1.0",
     "@google-cloud/speech": "^3.6.0",
-    "discord.js": "^12.2.0"
+    "discord.js": "^12.2.0",
+    "ffmpeg": "0.0.4",
+    "node-record-lpcm16": "^1.0.1",
+    "yargs": "^15.3.1"
   }
 }
