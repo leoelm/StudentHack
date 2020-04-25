@@ -14,6 +14,7 @@
     "discord.js": "^12.2.0",
     "ffmpeg": "0.0.4",
     "node-record-lpcm16": "^1.0.1",
+    "sox-audio": "^0.3.0",
     "yargs": "^15.3.1"
   }
 }
