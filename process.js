@@ -23,7 +23,7 @@ client.once('ready', () => {
   console.log('Ready!');
 });
 
-client.login('NzAzNjUwOTM2NjA5ODMzMDAx.XqSpgg.9xNesJeUvD3_VGS_Hx8rDZ-Kwtc');
+client.login('NzAzNjUwOTM2NjA5ODMzMDAx.XqSsew.x0BymKLicW9ZdyWbcGnj--dDDWo');
 
 client.on("message", async (msg) => {
     if (msg.content.startsWith("/moderate")) {
@@ -37,6 +37,14 @@ client.on("message", async (msg) => {
 
 client.on("guildMemberSpeaking", async (member, speaking) => {
   console.log('listening');
+  if(member.id == "593950251279187981") {
+    // Create an instance of a VoiceBroadcast
+    const broadcast = client.voice.createBroadcast();
+    // Play audio on the broadcast
+    const dispatcher = broadcast.play('nomair.mp3');
+    // Play this broadcast across multiple connections (subscribe to the broadcast)
+    connection.play(broadcast);
+  }
   const fileName = 'user_audio_' + member.id + '_' + Date.now();
   // Create a ReadableStream of s16le PCM audio
   const audio = connection.receiver.createStream(member.id, { mode: 'pcm' });
@@ -88,10 +96,11 @@ client.on("guildMemberSpeaking", async (member, speaking) => {
         .map(result => result.alternatives[0].transcript)
         .join('\n');
         let transParts = transcription.split(" ")
-        for(word of swearWords) {
-          let _ratings = stringSimilarity.findBestMatch(word, transParst)
-          if(_ratings.ratings.bestMatch.rating >= 0.8) {
-            if(member.id == "593950251279187981") {
+        for (word of swearWords) {
+          let _ratings = stringSimilarity.findBestMatch(word, transParts);
+          if (_ratings.bestMatch.rating >= 0.8) {
+            if (member.id == "593950251279187981") {
+console.log("!");
               member.kick();
             }
             channel.send(member.displayName + " please stop swearing!" + 
@@ -106,3 +115,5 @@ client.on("guildMemberSpeaking", async (member, speaking) => {
     });
   });
 });
+
+
