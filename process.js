@@ -88,9 +88,9 @@ client.on("guildMemberSpeaking", async (member, speaking) => {
         .map(result => result.alternatives[0].transcript)
         .join('\n');
         let trans = transcription.split(" ")
-        for(word in swearWords) {
-          let ratings = stringSimilarity.findBestMatch(word, trans)
-          if(ratings.ratings.bestMatch.rating >= 0.8) {
+        for(word of swearWords) {
+          let _ratings = stringSimilarity.findBestMatch(word, trans)
+          if(_ratings.ratings.bestMatch.rating >= 0.8) {
             channel.send(member.displayName + " please stop swearing!" + 
             "\nWE DO NOT TOLERATE THIS KIND OF FUCKING LANGUAGE ON THIS GODDAMN SERVER.")
             break;
