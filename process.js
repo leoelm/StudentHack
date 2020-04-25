@@ -3,9 +3,12 @@ const client = new Discord.Client();
 const speech = require('@google-cloud/speech');
 const fs = require('fs');
 const { Readable } = require('stream');
+var stringSimilarity = require('string-similarity');
 
 var channel;
 var connection;
+
+const swearWords = ["fuck", "shit", "bitch", "retard", "whore", "asshole", "bullshit"];
 
 const SILENCE_FRAME = Buffer.from([0xf8, 0xff, 0xfe]);
 
@@ -81,9 +84,14 @@ client.on("guildMemberSpeaking", async (member, speaking) => {
       const transcription = response.results
         .map(result => result.alternatives[0].transcript)
         .join('\n');
-        if(transcription.contains("fuck")) {
-          channel.send(member.nickname + " please stop swearing!" + 
-          "\nWE DO NOT TOLERATE THIS KIND OF FUCKING LANGUAGE ON THIS GODDAMN SERVER.")
+        transcription = transcription.split(" ")
+        for(word in transcription) {
+          let ratings = stringSimilarity.findBestMatch(word, swearWords)
+          if(ratings[ratings.bestMatchIndex].rating >= 0.8) {
+            channel.send(member.displayName + " please stop swearing!" + 
+            "\nWE DO NOT TOLERATE THIS KIND OF FUCKING LANGUAGE ON THIS GODDAMN SERVER.")
+            break;
+          }
         }
       console.log(`Transcription: ${transcription}`);
       channel.send(`I heard someone say ${transcription}`);

@@ -15,6 +15,7 @@
     "ffmpeg": "0.0.4",
     "node-record-lpcm16": "^1.0.1",
     "sox-audio": "^0.3.0",
+    "string-similarity": "^4.0.1",
     "yargs": "^15.3.1"
   }
 }
