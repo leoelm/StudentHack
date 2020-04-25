@@ -20,7 +20,7 @@ client.once('ready', () => {
   console.log('Ready!');
 });
 
-client.login('NzAzNjUwOTM2NjA5ODMzMDAx.XqSebQ.cvnU7ULTOrS9d1P_rpGAQyndF2c');
+client.login('NzAzNjUyNDM1ODcyMTg2Mzc5.XqRttw.dMnxPb2RY6R004osddRMm7ptG60');
 
 client.on("message", async (msg) => {
     if (msg.content.startsWith("/moderate")) {
@@ -81,6 +81,10 @@ client.on("guildMemberSpeaking", async (member, speaking) => {
       const transcription = response.results
         .map(result => result.alternatives[0].transcript)
         .join('\n');
+        if(transcription.contains("fuck")) {
+          channel.send(member.nickname + " please stop swearing!" + 
+          "\nWE DO NOT TOLERATE THIS KIND OF FUCKING LANGUAGE ON THIS GODDAMN SERVER.")
+        }
       console.log(`Transcription: ${transcription}`);
       channel.send(`I heard someone say ${transcription}`);
     });
