@@ -51,6 +51,10 @@ client.on("guildMemberSpeaking", async (member, speaking) => {
       isReady = true;
     }, 2000)
   }
+});
+
+client.on("guildMemberSpeaking", async (member, speaking) => {
+  console.log('listening');
   const fileName = 'user_audio_' + member.id + '_' + Date.now();
   // Create a ReadableStream of s16le PCM audio
   const audio = connection.receiver.createStream(member.id, { mode: 'pcm' });
