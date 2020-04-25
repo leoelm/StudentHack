@@ -1,4 +1,3 @@
-
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const speech = require('@google-cloud/speech');
@@ -15,21 +14,23 @@ client.on('message', async message => {
   // Join the same voice channel of the author of the message
   if (message.member.voice.channel) {
     console.log('listening');
+    const fileName = 'user_audio_' + message.member.id + '_' + Date.now();
+    console.log(fileName);
     const connection = await message.member.voice.channel.join();
     // Create a ReadableStream of s16le PCM audio
     const audio = connection.receiver.createStream(message.member.id, { mode: 'pcm' });
-    var ws = fs.createWriteStream('user_audio');
+    var ws = fs.createWriteStream(fileName);
     await audio.pipe(ws);
     ws.on('finish', function() {
       var SoxCommand = require('sox-audio');
       var command = SoxCommand();
-      command.input('user_audio')
+      command.input(fileName)
         .inputSampleRate(48000)
         .inputEncoding('signed')
         .inputBits(16)
         .inputChannels(2)
         .inputFileType('raw');
-      command.output('jsout.wav')
+      command.output(fileName + '.wav')
         .outputChannels(1)
         .outputSampleRate(48000)
         .outputFileType('wav');
@@ -39,11 +40,8 @@ client.on('message', async message => {
         // Google recognition
         const client = new speech.SpeechClient();
 
-        // The name of the audio file to transcribe
-        const fileName = 'jsout.wav';
-
         // Reads a local audio file and converts it to base64
-        const file = fs.readFileSync(fileName);
+        const file = fs.readFileSync(fileName + '.wav');
         const audioBytes = file.toString('base64');
 
         // The audio file's encoding, sample rate in hertz, and BCP-47 language code
@@ -71,4 +69,3 @@ client.on('message', async message => {
     });
   }
 });
-
