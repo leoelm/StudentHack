@@ -20,7 +20,7 @@ client.once('ready', () => {
   console.log('Ready!');
 });
 
-client.login('NzAzNjUyNDM1ODcyMTg2Mzc5.XqRttw.dMnxPb2RY6R004osddRMm7ptG60');
+client.login();
 
 client.on("message", async (msg) => {
     if (msg.content.startsWith("/moderate")) {
@@ -61,7 +61,10 @@ client.on("guildMemberSpeaking", async (member, speaking) => {
       // Reads a local audio file and converts it to base64
       const file = fs.readFileSync(fileName + '.wav');
       const audioBytes = file.toString('base64');
-
+      if (audioBytes.length < 100000) {
+        // File size small, extremely likely nothing was said, so don't process
+        return;
+      }
       // The audio file's encoding, sample rate in hertz, and BCP-47 language code
       const audio = {
         content: audioBytes,
@@ -81,12 +84,14 @@ client.on("guildMemberSpeaking", async (member, speaking) => {
       const transcription = response.results
         .map(result => result.alternatives[0].transcript)
         .join('\n');
-        if(transcription.contains("fuck")) {
-          channel.send(member.nickname + " please stop swearing!" + 
+        if(transcription.includes("fuck")) {
+          channel.send(member.displayName + " please stop swearing!" + 
           "\nWE DO NOT TOLERATE THIS KIND OF FUCKING LANGUAGE ON THIS GODDAMN SERVER.")
         }
+      if (transcription.length > 2) {
       console.log(`Transcription: ${transcription}`);
       channel.send(`I heard someone say ${transcription}`);
+    }
     });
   });
 });
