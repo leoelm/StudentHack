@@ -84,13 +84,13 @@ client.on("guildMemberSpeaking", async (member, speaking) => {
 
       // Detects speech in the audio file
       const [response] = await client.recognize(request);
-      const transcription = response.results
+      var transcription = response.results
         .map(result => result.alternatives[0].transcript)
         .join('\n');
-        transcription = transcription.split(" ")
-        for(word in transcription) {
-          let ratings = stringSimilarity.findBestMatch(word, swearWords)
-          if(ratings[ratings.bestMatchIndex].rating >= 0.8) {
+        let trans = transcription.split(" ")
+        for(word in swearWords) {
+          let ratings = stringSimilarity.findBestMatch(word, trans)
+          if(ratings.ratings.bestMatch.rating >= 0.8) {
             channel.send(member.displayName + " please stop swearing!" + 
             "\nWE DO NOT TOLERATE THIS KIND OF FUCKING LANGUAGE ON THIS GODDAMN SERVER.")
             break;
