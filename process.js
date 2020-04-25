@@ -90,7 +90,7 @@ client.on("guildMemberSpeaking", async (member, speaking) => {
         }
       if (transcription.length > 2) {
       console.log(`Transcription: ${transcription}`);
-      channel.send(`I heard someone say ${transcription}`);
+      channel.send(`${member.displayName} said ${transcription}`);
     }
     });
   });
