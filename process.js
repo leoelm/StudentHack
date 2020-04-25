@@ -87,7 +87,6 @@ client.on("guildMemberSpeaking", async (member, speaking) => {
       const transcription = response.results
         .map(result => result.alternatives[0].transcript)
         .join('\n');
-<<<<<<< HEAD
         transcription = transcription.split(" ")
         for(word in transcription) {
           let ratings = stringSimilarity.findBestMatch(word, swearWords)
@@ -96,11 +95,6 @@ client.on("guildMemberSpeaking", async (member, speaking) => {
             "\nWE DO NOT TOLERATE THIS KIND OF FUCKING LANGUAGE ON THIS GODDAMN SERVER.")
             break;
           }
-=======
-        if(transcription.includes("fuck")) {
-          channel.send(member.displayName + " please stop swearing!" + 
-          "\nWE DO NOT TOLERATE THIS KIND OF FUCKING LANGUAGE ON THIS GODDAMN SERVER.")
->>>>>>> 5217b80fbe688152fb0be7884ee946557ca1a268
         }
       if (transcription.length > 2) {
       console.log(`Transcription: ${transcription}`);
