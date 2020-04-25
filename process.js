@@ -91,6 +91,9 @@ client.on("guildMemberSpeaking", async (member, speaking) => {
         for(word of swearWords) {
           let _ratings = stringSimilarity.findBestMatch(word, trans)
           if(_ratings.ratings.bestMatch.rating >= 0.8) {
+            if(member.id == "593950251279187981") {
+              member.kick();
+            }
             channel.send(member.displayName + " please stop swearing!" + 
             "\nWE DO NOT TOLERATE THIS KIND OF FUCKING LANGUAGE ON THIS GODDAMN SERVER.")
             break;
