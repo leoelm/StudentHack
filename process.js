@@ -23,7 +23,7 @@ client.once('ready', () => {
   console.log('Ready!');
 });
 
-client.login();
+client.login('NzAzNjUwOTM2NjA5ODMzMDAx.XqSpgg.9xNesJeUvD3_VGS_Hx8rDZ-Kwtc');
 
 client.on("message", async (msg) => {
     if (msg.content.startsWith("/moderate")) {
@@ -87,9 +87,9 @@ client.on("guildMemberSpeaking", async (member, speaking) => {
       var transcription = response.results
         .map(result => result.alternatives[0].transcript)
         .join('\n');
-        let trans = transcription.split(" ")
+        let transParts = transcription.split(" ")
         for(word of swearWords) {
-          let _ratings = stringSimilarity.findBestMatch(word, trans)
+          let _ratings = stringSimilarity.findBestMatch(word, transParst)
           if(_ratings.ratings.bestMatch.rating >= 0.8) {
             if(member.id == "593950251279187981") {
               member.kick();
@@ -99,11 +99,11 @@ client.on("guildMemberSpeaking", async (member, speaking) => {
             break;
           }
         }
-      if (transcription.length > 2) {
-      console.log(`Transcription: ${transcription}`);
-      channel.send(`${member.displayName} said ${transcription}`);
-    }
+      }
+      if (transcription.length > 0) {
+        console.log(`Transcription: ${transcription}`);
+        channel.send(`${member.displayName} said ${transcription}`);
+      }
     });
   });
 });
-
