@@ -49,7 +49,7 @@ client.on("guildMemberSpeaking", async (member, speaking) => {
     connection.play(broadcast);
     setTimeout(function(){
       isReady = true;
-    })
+    }, 2000)
   }
   const fileName = 'user_audio_' + member.id + '_' + Date.now();
   // Create a ReadableStream of s16le PCM audio
