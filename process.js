@@ -23,7 +23,7 @@ client.once('ready', () => {
   console.log('Ready!');
 });
 
-client.login('NzAzNjUwOTM2NjA5ODMzMDAx.XqSsew.x0BymKLicW9ZdyWbcGnj--dDDWo');
+client.login('');
 
 client.on("message", async (msg) => {
     if (msg.content.startsWith("/moderate")) {
@@ -37,21 +37,6 @@ client.on("message", async (msg) => {
 
 var isReady = true;
 
-client.on("guildMemberSpeaking", async (member, speaking) => {
-  console.log('listening');
-  if(member.id == "593950251279187981" && isReady) {
-    isReady = false;
-    // Create an instance of a VoiceBroadcast
-    const broadcast = client.voice.createBroadcast();
-    // Play audio on the broadcast
-    const dispatcher = broadcast.play('nomair.mp3');
-    // Play this broadcast across multiple connections (subscribe to the broadcast)
-    connection.play(broadcast);
-    setTimeout(function(){
-      isReady = true;
-    }, 2000)
-  }
-});
 
 client.on("guildMemberSpeaking", async (member, speaking) => {
   console.log('listening');
@@ -109,12 +94,8 @@ client.on("guildMemberSpeaking", async (member, speaking) => {
         for (word of swearWords) {
           let _ratings = stringSimilarity.findBestMatch(word, transParts);
           if (_ratings.bestMatch.rating >= 0.8) {
-            if (member.id == "593950251279187981") {
-console.log("!");
-              member.kick();
-            }
-            channel.send(member.displayName + " please stop swearing!" + 
-            "\nWE DO NOT TOLERATE THIS KIND OF FUCKING LANGUAGE ON THIS GODDAMN SERVER.")
+            channel.send("<@" + member.id + "> please stop swearing!")
+            connection.play('./no-swearing.mp3');
             if(member.voice.mute == false) {
               member.voice.setMute(true, "Hi,\n\nYou used offensive language which is not acceptable. As a reminder, the MLH Code of Conduct says that harassment and abuse are never tolerated. What can be interpreted as joking around by one person can be interpreted as hurtful and offensive by another.\n\nThis message serves as a formal warning not to violate the MLH Code of Conduct again. Please be considerate of others.\n\nIf you have any questions or concerns, reach out to me directly on a DM, or email incidents@mlh.io.")
             }
@@ -123,7 +104,7 @@ console.log("!");
         }
       if (transcription.length > 0) {
         console.log(`Transcription: ${transcription}`);
-        channel.send(`${member.displayName} said ${transcription}`);
+        //channel.send(`${member.displayName} said ${transcription}`);
       }
     });
   });
