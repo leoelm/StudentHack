@@ -46,7 +46,7 @@ client.on("message", async (msg) => {
     }
     if (MODERATE) {
       for (word of swearWords) {
-        let message = msg.content.split(' ');
+        let message = msg.content.toLowerCase().split(' ');
         let _ratings = stringSimilarity.findBestMatch(word, message);
         if(_ratings.bestMatch.rating>0.8) {
           msg.reply("please stop swearing");
