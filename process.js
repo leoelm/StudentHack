@@ -5,6 +5,9 @@ const fs = require('fs');
 const { Readable } = require('stream');
 var stringSimilarity = require('string-similarity');
 
+var MODERATE = false;
+var RECORD = false;
+
 var channel;
 var connection;
 
@@ -26,18 +29,27 @@ client.once('ready', () => {
 client.login('');
 
 client.on("message", async (msg) => {
-    if (msg.content.startsWith("/moderate")) {
+    if (msg.content.startsWith("/join-voice")) {
         if (msg.member.voice.channel) {
             connection = await msg.member.voice.channel.join();
             connection.play(new SingleSilence(), { type: 'opus' });
             channel = msg.channel;
         }
+    } else if (msg.content.startsWith("/moderate")) {
+      MODERATE = !MODERATE;
+      msg.channel.send("Voice & chat moderation is now " + (MODERATE ? 'enabled' : 'disabled'));
+    } else if (msg.content.startsWith("/record")) {
+      RECORD = !RECORD;
+      msg.channel.send("Voice transcription is now " + (RECORD ? 'enabled' : 'disabled'));
     }
-    for (word of swearWords) {
-      let message = msg.content.split(' ')
-      let _ratings = stringSimilarity.findBestMatch(word, message);
-      if(_ratings.bestMatch.rating>0.8) {
-        msg.reply("please stop swearing");
+    if (MODERATE) {
+      for (word of swearWords) {
+        let message = msg.content.split(' ');
+        let _ratings = stringSimilarity.findBestMatch(word, message);
+        if(_ratings.bestMatch.rating>0.8) {
+          msg.reply("please stop swearing");
+          msg.delete();
+        }
       }
     }
 });
@@ -97,26 +109,22 @@ client.on("guildMemberSpeaking", async (member, speaking) => {
       var transcription = response.results
         .map(result => result.alternatives[0].transcript)
         .join('\n');
-        let transParts = transcription.split(" ")
+        let transParts = transcription.split(" ");
         for (word of swearWords) {
           let _ratings = stringSimilarity.findBestMatch(word, transParts);
-          if (_ratings.bestMatch.rating >= 0.8) {
+          if (_ratings.bestMatch.rating >= 0.8 && MODERATE) {
             channel.send("<@" + member.id + "> please stop swearing!")
             connection.play('./no-swearing.mp3');
             if(member.voice.mute == false) {
-              member.voice.setMute(true, "muted");
-              connectDM = await member.createDM();
-              connectDM.send("Hi,\n\nYou used offensive language which is not acceptable. As a reminder, the MLH Code of Conduct says that harassment and abuse are never tolerated. What can be interpreted as joking around by one person can be interpreted as hurtful and offensive by another.\n\nThis message serves as a formal warning not to violate the MLH Code of Conduct again. Please be considerate of others.\n\nIf you have any questions or concerns, reach out to me directly on a DM, or email incidents@mlh.io.");
+              member.voice.setMute(true, "Hi,\n\nYou used offensive language which is not acceptable. As a reminder, the MLH Code of Conduct says that harassment and abuse are never tolerated. What can be interpreted as joking around by one person can be interpreted as hurtful and offensive by another.\n\nThis message serves as a formal warning not to violate the MLH Code of Conduct again. Please be considerate of others.\n\nIf you have any questions or concerns, reach out to me directly on a DM, or email incidents@mlh.io.")
             }
             break;
           }
         }
-      if (transcription.length > 0) {
+      if (transcription.length > 0 && RECORD) {
+        channel.send(member.displayName + ": " + transcription);
         console.log(`Transcription: ${transcription}`);
-        //channel.send(`${member.displayName} said ${transcription}`);
       }
     });
   });
 });
-
-
