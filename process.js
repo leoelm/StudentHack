@@ -29,7 +29,9 @@ client.once('ready', () => {
 client.login('');
 
 client.on("message", async (msg) => {
-    if (msg.content.startsWith("/join-voice")) {
+  if (msg.content.startsWith("/help")) {
+    msg.reply("Here are the command options for this bot: \n/join-voice: join the voice channel\n/moderate: toggle moderation mode of chat & voice channel\n/record: toggle transcription of voice channel")
+  } else if (msg.content.startsWith("/join-voice")) {
         if (msg.member.voice.channel) {
             connection = await msg.member.voice.channel.join();
             connection.play(new SingleSilence(), { type: 'opus' });
