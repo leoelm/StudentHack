@@ -33,6 +33,13 @@ client.on("message", async (msg) => {
             channel = msg.channel;
         }
     }
+    for (word of swearWords) {
+      let message = msg.content.split(' ')
+      let _ratings = stringSimilarity.findBestMatch(word, message);
+      if(_ratings.bestMatch.rating>0.8) {
+        msg.reply("please stop swearing");
+      }
+    }
 });
 
 var isReady = true;
