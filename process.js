@@ -51,6 +51,13 @@ client.on("message", async (msg) => {
         if(_ratings.bestMatch.rating>0.8) {
           msg.reply("please stop swearing");
           msg.delete();
+        } else {
+          for (msgWord in message) {
+            if(msgWord.startsWith(word)) {
+              msg.reply("please stop swearing");
+              msg.delete();
+            }
+          }
         }
       }
     }
@@ -121,6 +128,14 @@ client.on("guildMemberSpeaking", async (member, speaking) => {
               member.voice.setMute(true, "muted")
               connectDM = await member.createDM();
               connectDM.send("Hi,\n\nYou used offensive language which is not acceptable. As a reminder, the MLH Code of Conduct says that harassment and abuse are never tolerated. What can be interpreted as joking around by one person can be interpreted as hurtful and offensive by another.\n\nThis message serves as a formal warning not to violate the MLH Code of Conduct again. Please be considerate of others.\n\nIf you have any questions or concerns, reach out to me directly on a DM, or email incidents@mlh.io.");
+            } else {
+              for (msgWord in transParts) {
+                if(msgWord.startsWith(word)) {
+                  member.voice.setMute(true, "muted")
+                  connectDM = await member.createDM();
+                  connectDM.send("Hi,\n\nYou used offensive language which is not acceptable. As a reminder, the MLH Code of Conduct says that harassment and abuse are never tolerated. What can be interpreted as joking around by one person can be interpreted as hurtful and offensive by another.\n\nThis message serves as a formal warning not to violate the MLH Code of Conduct again. Please be considerate of others.\n\nIf you have any questions or concerns, reach out to me directly on a DM, or email incidents@mlh.io.");
+                }
+              }
             }
             return;
           }
